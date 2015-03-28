@@ -12,7 +12,11 @@ app.AppView = Backbone.View.extend({
     this.$input = this.$('#new-todo');
     this.$list = this.$('#todo-list');
     this.listenTo(app.todos, 'add', this.addOne);
-  },
+
+
+    app.todos.fetch();
+
+    },
 
   newAttributes: function() {
     return {
@@ -25,7 +29,7 @@ app.AppView = Backbone.View.extend({
   createOnEnter: function(e) {
     if (e.which === ENTER_KEY && this.$input.val().trim()){
       app.todos.create(this.newAttributes());
-      //this.$input.val('');
+      this.$input.val('');
     }
   },
 
@@ -40,8 +44,3 @@ app.AppView = Backbone.View.extend({
   }
 
 });
-
-var app = app || {};
-var ENTER_KEY = 13;
-
-new app.AppView();
