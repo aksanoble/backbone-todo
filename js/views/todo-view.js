@@ -4,18 +4,63 @@ app.TodoView = Backbone.View.extend({
   template: _.template($('#item-template').html()),
 
   events: {
-    'click .destroy': 'clear'
+    'click .toggle': 'toggleCompleted',
+    'click .destroy': 'clear',
+    'dblclick label': 'edit',
+    'keypress .edit': 'updateOnEnter',
+    'keydown .edit': 'revertOnEscape',
+    'blur .edit': 'close'
   },
 
 
   initialize: function(){
+    this.listenTo(this.model, 'change', this.render);
     this.listenTo(this.model, 'destroy', this.remove);
+
 
   },
 
   render: function() {
+    console.log(this.el);
     this.$el.html(this.template(this.model.toJSON()));
+    this.$el.toggleClass('completed', this.model.get('completed'));;
+    this.$input = this.$('.edit');
     return this;
+  },
+
+  edit: function(){
+    this.$el.addClass('editing');
+    this.$input.focus();
+  },
+
+  toggleCompleted: function(){
+    this.model.toggle();
+  },
+
+  updateOnEnter: function(e) {
+    if (e.which === ENTER_KEY) {
+      this.close();
+    }
+  },
+
+  revertOnEscape: function(e) {
+    if(e.which === ESC_KEY) {
+      this.$el.removeClass('editing');
+      this.$input.val(this.model.get('title'));
+    }
+  },
+
+  close: function(){
+    var value = this.$input.val();
+    var trimmedValue = value.trim();
+
+    if (trimmedValue) {
+      this.model.save({title: trimmedValue});
+
+    }
+
+    this.$el.removeClass('editing');
+
   },
 
   clear: function() {
