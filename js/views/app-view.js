@@ -14,6 +14,7 @@ app.AppView = Backbone.View.extend({
   initialize: function() {
     console.log(this.$('#toggle-all'));
     this.$main = this.$('#main');
+    this.listenTo(app.todos, 'reset', this.addAll);
     this.$input = this.$('#new-todo');
     this.$list = this.$('#todo-list');
     this.$footer = this.$('#footer');

@@ -20,6 +20,14 @@ app.TodoView = Backbone.View.extend({
 
   },
 
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    this.$el.toggleClass('completed', this.model.get('completed'));;
+    this.toggleVisible();
+    this.$input = this.$('.edit');
+    return this;
+  },
+
   toggleVisible: function() {
     console.log(this.isHidden());
     this.$el.toggleClass('hidden', this.isHidden());
@@ -29,14 +37,6 @@ app.TodoView = Backbone.View.extend({
     return this.model.get('completed') ?
     app.TodoFilter === 'active' :
     app.TodoFilter === 'completed';
-  },
-
-  render: function() {
-    console.log(this.el);
-    this.$el.html(this.template(this.model.toJSON()));
-    this.$el.toggleClass('completed', this.model.get('completed'));;
-    this.$input = this.$('.edit');
-    return this;
   },
 
   edit: function(){
