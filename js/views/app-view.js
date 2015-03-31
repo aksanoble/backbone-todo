@@ -22,6 +22,7 @@ app.AppView = Backbone.View.extend({
 
     this.listenTo(app.todos, 'all', this.render);
     this.listenTo(app.todos, 'add', this.addOne);
+    this.listenTo(app.todos, 'change:completed', this.filterOne);
     this.listenTo(app.todos, 'filter', this.filterAll);
 
 
